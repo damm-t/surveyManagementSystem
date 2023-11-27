@@ -1,3 +1,4 @@
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -141,24 +142,28 @@ public class sc_survey extends sc_mainPage_controller {
             e.printStackTrace();
         }
     }
-
+    
     private void shown() throws IOException {
         ObservableList<SurveyDetails> data = FXCollections.observableArrayList();
-
-        try (FileReader br = new FileReader(filepath)) {
-            Gson gson = new Gson();
-            JsonElement root = gson.fromJson(br, JsonElement.class);
-
+        Gson gson = new Gson();
+    
+        try (BufferedReader reader = new BufferedReader(new FileReader(filepath))) {
+            JsonElement root = gson.fromJson(reader, JsonElement.class);
+    
             if (root.isJsonArray()) {
                 JsonArray jsonArray = root.getAsJsonArray();
-
+    
                 for (JsonElement element : jsonArray) {
-                    JsonObject record = element.getAsJsonObject();
-
-                    String title = record.get("title").getAsString();
-                    String dated = record.get("created_date").getAsString();
-
-                    data.add(new SurveyDetails(title, dated));
+                    if (element.isJsonObject()) {
+                        JsonObject surveyObject = element.getAsJsonObject();
+    
+                        if (surveyObject.has("surveyInfo")) {
+                            JsonObject surveyInfo = surveyObject.getAsJsonObject("surveyInfo");
+                            String title = surveyInfo.get("title").getAsString();
+                            String desc = surveyInfo.get("description").getAsString();
+                            data.add(new SurveyDetails(title, desc));
+                        }
+                    }
                 }
             }
         } catch (IOException e) {
@@ -166,6 +171,7 @@ public class sc_survey extends sc_mainPage_controller {
         }
         SurveyTable.setItems(data);
     }
+    
 
     public static class get_title {
 
@@ -179,16 +185,16 @@ public class sc_survey extends sc_mainPage_controller {
                 Gson gson = new Gson();
                 JsonElement root = gson.fromJson(br, JsonElement.class);
 
-                if (root.isJsonArray()) {
-                    JsonArray jsonArray = root.getAsJsonArray();
+                if (root.isJsonObject()) {
+                    JsonObject jsonObject = root.getAsJsonObject();
+                    JsonObject surveyInfo = jsonObject.getAsJsonObject("surveyInfo");
 
-                    for (JsonElement element : jsonArray) {
-                        JsonObject data = element.getAsJsonObject();
-                        String key = data.get("title").getAsString();
+                    if (surveyInfo != null) {
+                        String key = surveyInfo.get("title").getAsString();
                         if (key.equalsIgnoreCase(title)) {
                             System.out.println("Imformation get found");
-                            setSurveydata(data);
-                            System.out.println(data);
+                            setSurveydata(surveyInfo);
+                            System.out.println(surveyInfo);
                         }
                     }
                 }
@@ -196,6 +202,7 @@ public class sc_survey extends sc_mainPage_controller {
                 e.printStackTrace(); // Handle the exception appropriately, e.g., log or rethrow
             }
         }
+
         public static JsonObject Surveydata;
 
         public static JsonObject getSurveyData() {
@@ -227,7 +234,7 @@ public class sc_survey extends sc_mainPage_controller {
         public String getCreatedDate() {
             return createdDate;
         }
-    
+
         public void setCreatedDate(String creatdDate) {
             createdDate = creatdDate;
         }

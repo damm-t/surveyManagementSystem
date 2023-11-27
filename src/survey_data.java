@@ -66,4 +66,34 @@ public class survey_data {
             return new HashMap<>(smallMCQOptions);
         }
     }
+    private String surveyTitle;
+    private String surveyDescription;
+    private String surveyDate;
+
+    // Getter methods
+    public String getSurveyTitle() {
+        return surveyTitle;
+    }
+
+    public String getSurveyDescription() {
+        return surveyDescription;
+    }
+
+    public String getSurveyDate() {
+        return surveyDate;
+    }
+
+    // Setter methods
+    public void setSurveyTitle(String surveyTitle) {
+        this.surveyTitle = surveyTitle;
+    }
+
+    public void setSurveyDescription(String surveyDescription) {
+        this.surveyDescription = surveyDescription;
+    }
+
+    public void setSurveyDate(String surveyDate) {
+        this.surveyDate = surveyDate;
+    }
+
 }

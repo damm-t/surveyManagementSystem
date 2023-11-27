@@ -1,6 +1,10 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -24,7 +28,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class survey {
+public class survey extends QuestionPage {
 
     @FXML
     private VBox BigBox;
@@ -78,16 +82,29 @@ public class survey {
     private Label user;
 
     @FXML
+    private VBox bigBox;
+
+    @FXML
     void close(ActionEvent event) {
         System.exit(0);
     }
 
+    survey_data sd = new survey_data();
     private Scene scene;
     private Stage stage;
     private Parent root;
 
     final private String filepath = "DB/survey.json";
 
+    @Override
+    public void initialize (URL url, ResourceBundle rl){
+        try {
+            readFromJson();
+            construct();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     @FXML
     public void SignOut(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("SignIn.fxml"));
@@ -101,9 +118,9 @@ public class survey {
     private int lsCount = 0;
     private int oeCount = 0;
     int question_amount = 0;
+    survey_data get_data = new survey_data();
     private void readFromJson() throws IOException {
         Gson gson = new Gson();
-        
 
         try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
             JsonElement root = gson.fromJson(br, JsonElement.class);
@@ -116,7 +133,10 @@ public class survey {
                 if (surveyInfo != null) {
                     String title = surveyInfo.get("title").getAsString();
                     String desc = surveyInfo.get("description").getAsString();
-                    String date = surveyInfo.get("datePosted").getAsString();
+                    String date = surveyInfo.get("created_date").getAsString();
+                    sd.setSurveyTitle(title);
+                    sd.setSurveyDescription(desc);
+                    sd.setSurveyDate(date);
                 }
 
                 JsonArray questionArray = jsonObject.getAsJsonArray("questions");
@@ -130,10 +150,8 @@ public class survey {
                         String type = questionDetails.get("type").getAsString();
                         int questionId = questionDetails.get("questionId").getAsInt();
                         JsonObject question_array = questionDetails.getAsJsonObject("questionArray");
-
-                        survey_data get_data = new survey_data();
                         get_data.determine(type, question_array);
-                        
+
                         switch (type) {
                             case "MCQ":
                                 mcqCount++;
@@ -153,12 +171,12 @@ public class survey {
         }
     }
 
-    private void construct() throws IOException{
-        readFromJson();
-        
+    private void construct() throws IOException {
+        createdMCQ();
+        createdLS();
+        createdOE();
     }
 
-    
     public int getMcqCount() {
         return mcqCount;
     }
@@ -171,4 +189,33 @@ public class survey {
         return oeCount;
     }
 
+    public void createdMCQ() throws IOException {
+        List<Node> mcqNodes = new ArrayList<>();
+        for (int i = 0; i < mcqCount; i++) {
+            Node mcqNode = createNode("MCQ", i);
+            mcqNodes.add(mcqNode);
+        }
+
+        BigBox.getChildren().addAll(mcqNodes);
+    }
+
+    public void createdOE() throws IOException {
+        List<Node> oeNodes = new ArrayList<>();
+        for (int i = 0; i < mcqCount; i++) {
+            Node oeNode = createNode("OE", i);
+            oeNodes.add(oeNode);
+        }
+
+        BigBox.getChildren().addAll(oeNodes);
+    }
+
+    public void createdLS() throws IOException {
+        List<Node> lsNodes = new ArrayList<>();
+        for (int i = 0; i < mcqCount; i++) {
+            Node lsNode = createNode("LS", i);
+            lsNodes.add(lsNode);
+        }
+
+        BigBox.getChildren().addAll(lsNodes);
+    }
 }

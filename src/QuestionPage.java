@@ -450,7 +450,7 @@ public class QuestionPage implements Initializable {
         }
     }
 
-    private Node createNode(String nodeType, int childId) throws IOException {
+    public Node createNode(String nodeType, int childId) throws IOException {
         Node node;
         switch (nodeType) {
             case "Multiple-Choice":

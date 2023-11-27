@@ -131,11 +131,11 @@ public class MCQ_controller extends QuestionPage {
 
     @FXML
     public void delete(ActionEvent event) throws IOException {
-    
-            deleteNodeByType(childIdController);
-            System.out.println(SharedNodeList.getNodeSize());
-            System.out.println("This is child Id: " + this.childIdController);
-        
+
+        deleteNodeByType(childIdController);
+        System.out.println(SharedNodeList.getNodeSize());
+        System.out.println("This is child Id: " + this.childIdController);
+
     }
 
     // @FXML
@@ -153,7 +153,7 @@ public class MCQ_controller extends QuestionPage {
     public void initialize(URL location, ResourceBundle resources) {
     }
 
-public static class getMCQData {
+    public static class getMCQData {
 
         public static Map<Integer, String> smallMCQOptions = new HashMap<>();
         private static int idCounter = 1; // Counter for generating IDs

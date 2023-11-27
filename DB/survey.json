@@ -1,11 +1,48 @@
-[{
-    "title": "Why Sai Is So Handsome?",
-    "description": "This is a serius survey",
-    "created_date": "2022-02-02"
-},
-{
-    "title": "Why Aria is Gorgeous?",
-    "description": "This is a serius survey",
-    "created_date": "2022-03-03"
-}
+[
+    {
+        "surveyInfo": {
+            "title": "Why Sai Is So Handsome?",
+            "description": "This is a serius survey",
+            "created_date": "2022-02-02"
+        }
+    },
+    {
+        "surveyInfo": {
+            "title": "Why Aria is Gorgeous?",
+            "description": "This is a serius survey",
+            "created_date": "2022-03-03"
+        }
+    },
+    {
+        "surveyInfo": {
+            "title": "TUSC Prom Night",
+            "description": "We will be hosting a prom night! We would like your opinions.",
+            "created_date": "2023-11-30",
+            "email": "DB/survey.json"
+        },
+        "questions": [
+            {
+                "questionDetails": {
+                    "type": "MCQ",
+                    "questionId": 11,
+                    "Option": 1,
+                    "OptionTitle": "RM50-RM80",
+                    "Option": 2,
+                    "OptionTitle": "RM60-RM80"
+                }
+            },
+            {
+                "questionDetails": {
+                    "type": "OE",
+                    "questionId": 22
+                }
+            },
+            {
+                "questionDetails": {
+                    "type": "LS",
+                    "questionId": 33
+                }
+            }
+        ]
+    }
 ]

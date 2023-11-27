@@ -20,7 +20,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception{
         
         stage.setTitle("Survey Management");
-        scene = new Scene(loadFXML("SignIn"));
+        scene = new Scene(loadFXML("signIn"));
         stage.setScene(scene);
         
         scene.getRoot().setOnMousePressed((MouseEvent event) ->{

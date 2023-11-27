@@ -123,12 +123,13 @@
                                                                     <children>
                                                                         <VBox fx:id="defaultBox" prefWidth="463.0">
                                                                             <children>
-                                                                                <HBox fx:id="hbox" prefWidth="366.0">
+                                                                                <HBox fx:id="hbox" prefWidth="463.0">
                                                                                 </HBox>
                                                                             </children>
                                                                         </VBox>
                                                                     </children>
                                                                 </FlowPane>
+                                                <VBox fx:id="bigBox" prefHeight="357.0" prefWidth="463.0" />
                                                             </children>
                                                         </VBox>
                                                     </center>
