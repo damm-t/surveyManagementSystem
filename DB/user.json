@@ -1,0 +1,29 @@
+[
+  {
+    "firstName": "Aria",
+    "lastName": "Khong",
+    "faculty": "Design",
+    "phoneNumber": "016-5388920",
+    "email": "aria@sd.taylors.edu.my",
+    "username": "ariakhg",
+    "password": "123"
+  },
+  {
+    "firstName": "Chow",
+    "lastName": "Ling",
+    "faculty": "Computer Science",
+    "phoneNumber": "012-3456782",
+    "email": "chow@sd.taylors.edu.my",
+    "username": "csl",
+    "password": "123"
+  },
+  {
+    "firstName": "Voon",
+    "lastName": "Mama",
+    "faculty": "Education",
+    "phoneNumber": "018-2682565",
+    "email": "voon@sd.taylors.edu.my",
+    "username": "babamama",
+    "password": "123"
+  }
+]

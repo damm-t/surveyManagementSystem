@@ -1,0 +1,128 @@
+.top-pane{
+    -fx-background-color: #e74a1b;
+}
+.background{
+    -fx-background-color: #ffdba9;
+}
+.close{
+    -fx-background-color: #e71b1b;
+    /* -fx-translate-x: 0;
+    -fx-translate-y: 50; */
+}
+.close:hover{
+    -fx-background-color: #ff0000;
+    -fx-cursor: hand;
+    
+    /* -fx-animation: outsideLineAnimation 2s infinite linear; */
+}
+
+/* @z-keyframes outsideLineAnimation {
+    0% {
+        -fx-translate-x: 0;
+    }
+    100% {
+        -fx-translate-x: 200;
+    }
+} */
+
+.log-out{
+    -fx-background-color: #e71b1b;
+}
+.log-out:hover{
+    -fx-background-color: #ff0000;
+    -fx-cursor: hand;
+}
+.left-pane{
+    -fx-background-color: white;
+    -fx-background-radius: 0px 0px 50px 0px;
+    /* -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 5, 0, 0); */
+}
+.profile_bar{
+    -fx-background-color: linear-gradient(to bottom left, #ffe603, #ffa703,#e05d10,#e73927);
+}
+.profile-pic{
+    -fx-background-color:white;
+    -fx-background-radius: 50px;
+}
+.first-btn{
+    -fx-background-color:white;
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 0 0 0 15;
+}
+.first-btn:hover{
+    -fx-background-color:linear-gradient(to top left, #ffeb33, #fab32f,#ff640b);
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+.second-btn{
+    -fx-background-color:white;
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 0 0 0 15;
+}
+.second-btn:hover{
+    -fx-background-color:linear-gradient(to top left, #ffeb33, #fab32f,#ff640b);
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+.third-btn{
+    -fx-background-color:white;
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 0 0 0 15;
+}
+.third-btn:hover{
+    -fx-background-color:linear-gradient(to top left, #ffeb33, #fab32f,#ff640b);
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+.date{
+    -fx-background-color:white;
+}
+.total-user{
+    -fx-background-color:white;
+    -fx-background-radius: 5px;
+    
+}
+.total-survey{
+    -fx-background-color:white;
+    -fx-background-radius: 5px;
+}
+.total-admin{
+    -fx-background-color:white;
+    -fx-background-radius: 5px;
+}
+/* .do-survey{
+    -fx-background-color:white;
+}
+.create-survey{
+    -fx-background-color:white;
+    -fx-background-radius: 5px;
+} */
+.do-survey-top{
+    /* -fx-background-radius: px; */
+    -fx-background-color:linear-gradient(to top left, #ffeb33, #fab32f,#ff640b);
+}
+.create-survey-top{
+    /* -fx-background-radius: px; */
+    -fx-background-color:linear-gradient(to top right, #f7eea0, #ffc04c,#ff8b48);
+} 
+.click-me{
+    -fx-background-color:linear-gradient(to left, #f88b24,#ff8a1d);
+}
+.do-survey-btn{
+    -fx-background-color:linear-gradient(to top left,  #fabf53, #f89900, #ff640b);
+}
+.do-survey-btn:hover{
+    -fx-background-color:linear-gradient(to top left, #f7eea0, #ffc04c,#ff8b48);
+    -fx-cursor: hand;
+}
+.create-survey-btn{
+    -fx-background-color:linear-gradient(to top left,  #fabf53, #f89900, #ff640b);
+}
+.create-survey-btn:hover{
+    -fx-background-color:linear-gradient(to top left, #f7eea0, #ffc04c,#ff8b48);
+    -fx-cursor: hand;
+}
+.bar-chart{
+    -fx-background-color:white;
+    -fx-background-radius: 5px;
+}

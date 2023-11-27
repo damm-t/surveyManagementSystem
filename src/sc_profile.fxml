@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="740.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sc_profile_controller">
+   <children>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <BorderPane layoutX="-1.0" prefHeight="596.0" prefWidth="740.0" styleClass="background" stylesheets="@z-mainPageDesign.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <top>
+                  <AnchorPane prefHeight="21.0" prefWidth="740.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <AnchorPane layoutY="-1.0" prefHeight="38.0" prefWidth="740.0" styleClass="top-pane" stylesheets="@z-mainPageDesign.css">
+                           <children>
+                              <Button fx:id="close" layoutX="5.0" layoutY="6.0" mnemonicParsing="false" onAction="#close" styleClass="close" stylesheets="@z-mainPageDesign.css" text="X" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font></Button>
+                              <Button fx:id="logOut" layoutX="668.0" layoutY="6.0" mnemonicParsing="false" styleClass="log-out" stylesheets="@z-mainPageDesign.css" text="Log Out" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+               </top>
+               <left>
+                  <AnchorPane prefHeight="487.0" prefWidth="218.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <AnchorPane layoutY="196.0" prefHeight="489.0" prefWidth="220.0" styleClass="left-pane" stylesheets="@z-mainPageDesign.css" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <Button fx:id="fsBtn" layoutY="160.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="220.0" styleClass="first-btn" stylesheets="@z-mainPageDesign.css" text="   Profile">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <graphic>
+                                    <FontAwesomeIcon glyphName="USER" size="22" />
+                                 </graphic></Button>
+                              <Button fx:id="scdBtn" layoutY="208.0" onAction="#switch_to_survey" mnemonicParsing="false" prefHeight="48.0" prefWidth="220.0" styleClass="second-btn" stylesheets="@z-mainPageDesign.css" text="  Survey Dashboard">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <graphic>
+                                    <FontAwesomeIcon glyphName="BOOK" selectionEnd="3" selectionStart="3" size="22" />
+                                 </graphic></Button>
+                              <Pane fx:id="profileCard" prefHeight="161.0" prefWidth="220.0" styleClass="profile_bar" stylesheets="@z-mainPageDesign.css">
+                                 <children>
+                                    <Label fx:id="gmail" layoutX="23.0" layoutY="108.0" text="blabla@z-gmail.com" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="user" layoutX="23.0" layoutY="124.0" text="Survey Creator" textFill="WHITE" />
+                                    <AnchorPane layoutX="22.0" layoutY="28.0" prefHeight="65.0" prefWidth="65.0" styleClass="profile-pic" stylesheets="@z-mainPageDesign.css">
+                                       <children>
+                                          <ImageView fx:id="profilePic" fitHeight="65.0" fitWidth="65.0" layoutY="-3.0" pickOnBounds="true" preserveRatio="true" />
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </Pane>
+                              <ImageView fitHeight="48.0" fitWidth="160.0" layoutX="17.0" layoutY="431.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/taylors-logo-latest.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+               </left>
+               <center>
+                  <AnchorPane prefHeight="577.0" prefWidth="364.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Pane layoutX="11.0" layoutY="75.0" prefHeight="410.0" prefWidth="451.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 10;">
+                           <children>
+                              <Label layoutX="65.0" layoutY="100.0" text="First Name   :" />
+                              <Label layoutX="65.0" layoutY="140.0" text="Last Name   :" />
+                              <Label layoutX="65.0" layoutY="180.0" text="Phone no      : " />
+                              <Label layoutX="65.0" layoutY="220.0" text="Email              :" />
+                              <Label layoutX="65.0" layoutY="260.0" text="Faculty          :" />
+                              <TextField fx:id="first_name_txt" editable="true" layoutX="170.0" layoutY="97.0" style="-fx-background-radius: 15;" />
+                              <TextField fx:id="last_name_txt" editable="true" layoutX="170.0" layoutY="137.0" style="-fx-background-radius: 15;" />
+                              <TextField fx:id="phoneNo_txt" editable="true" layoutX="170.0" layoutY="177.0" style="-fx-background-radius: 15;" />
+                              <TextField fx:id="email_txt" editable="true" layoutX="170.0" layoutY="217.0" style="-fx-background-radius: 15;" />
+                              <TextField fx:id="faculty_txt" editable="true" layoutX="170.0" layoutY="257.0" style="-fx-background-radius: 15;" />
+                              <Circle fill="#ecf0f2" layoutX="424.0" layoutY="22.0" radius="60.0" stroke="BLACK" strokeType="INSIDE" style="-fx-fill: ECF0F2;" />
+                              <Button fx:id="uploadBtn" contentDisplay="GRAPHIC_ONLY" layoutX="380.0" layoutY="-16.0" onAction="#UploadImageActionPerformed" prefWidth="86.0" style="-fx-background-color: ECF0F2;">
+                                 <graphic>
+                                    <ImageView fitHeight="70.0" fitWidth="70.0" layoutX="389.0" layoutY="-13.0">
+                                       <image>
+                                          <Image url="@../images/uploadbtn.png" />
+                                       </image>
+                                       <effect>
+                                          <ColorAdjust brightness="1.0" contrast="1.0" hue="1.0" saturation="1.0" />
+                                       </effect>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="saveBtn" layoutX="374.0" layoutY="346.0" mnemonicParsing="false" onAction="#savingButton" prefHeight="25.0" prefWidth="70.0" style="-fx-background-radius: 15; -fx-background-color: F1E18C;" text="Save">
+                                 <graphic>
+                                    <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="389.0" layoutY="-13.0">
+                                       <image>
+                                          <Image url="@../images/check_fill.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="editbutton" layoutX="296.0" layoutY="346.0" mnemonicParsing="false" onAction="#editButton" prefHeight="25.0" prefWidth="70.0" style="-fx-background-radius: 15; -fx-background-color: F1E18C;" text="Edit">
+                                    <graphic>
+                                       <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="389.0" layoutY="-13.0">
+                                          <image>
+                                             <Image url="@../images/edit_01.png" />
+                                          </image>
+                                       </ImageView>
+                                    </graphic>
+                              </Button>
+                           </children>
+                        </Pane>
+                     </children></AnchorPane>
+               </center>
+            </BorderPane>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>
