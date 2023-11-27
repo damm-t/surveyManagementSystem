@@ -183,8 +183,17 @@ public class AdminScController implements Initializable {
         stage.show();
     }
 
+    @FXML
+    void logOut(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("SignIn.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
     // contraint the file pathway
-    final static String filepath = "src/surveycreator.json";
+    final static String filepath = "DB/surveycreator.json";
 
     @FXML
     private void addBtn(ActionEvent event) throws JSONException {
@@ -287,7 +296,7 @@ public class AdminScController implements Initializable {
             inputPassword = AdminScController.Profile.getPassword();
         }
     
-        try (BufferedReader br = new BufferedReader(new FileReader("src/surveycreator.json"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("DB/surveycreator.json"))) {
             StringBuilder jsonString = new StringBuilder();
             String line;
     
@@ -328,7 +337,7 @@ public class AdminScController implements Initializable {
                     jsonArray.put(newEntry);
     
                     // Write the updated JSON array back to the file using BufferedWriter
-                    try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/surveycreator.json"))) {
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter("DB/surveycreator.json"))) {
                         writer.write(jsonArray.toString(4) + "\n");
                     }
     
@@ -383,7 +392,7 @@ public class AdminScController implements Initializable {
         removeSc.forEach(allSc::remove);
 
         // Get the filepath
-        String filepath = "src/surveycreator.json";
+        String filepath = "DB/surveycreator.json";
 
         try {
             File file = new File(filepath);
@@ -517,7 +526,7 @@ public class AdminScController implements Initializable {
         // Table.getColumns().addAll(idCol, firstNameCol, lastNameCol, facultyCol,
         // emailCol, phoneNoCol, passwordCol);
 
-        try (BufferedReader br = new BufferedReader(new FileReader("src/surveycreator.json"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("DB/surveycreator.json"))) {
             JsonParser parser = new JsonParser();
             JsonArray jsonArray = parser.parse(br).getAsJsonArray();
 

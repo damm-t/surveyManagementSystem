@@ -82,6 +82,15 @@ public class sc_mainPage_controller implements Initializable {
         stage.show();
     }
 
+    @FXML
+    public void logOut(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("SignIn.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
     public final String filepath = "DB/surveycreator.json";
 
     public void showingPic(ImageView shownPic) throws IOException {

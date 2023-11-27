@@ -139,6 +139,15 @@ public class insidesurvey_controler extends LS_controller {
     }
 
     @FXML
+    void switchToDefault(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("user_survey.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
     void save(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setContentText("Congratulation");

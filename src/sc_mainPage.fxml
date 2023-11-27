@@ -35,7 +35,7 @@
                                     <Font name="System Bold" size="12.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="logOut" layoutX="668.0" layoutY="6.0"
+                              <Button fx:id="logOut" onAction="#logOut" layoutX="668.0" layoutY="6.0"
                                  mnemonicParsing="false" styleClass="log-out"
                                  stylesheets="@z-mainPageDesign.css" text="Log Out" textFill="WHITE">
                                  <font>

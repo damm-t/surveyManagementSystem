@@ -51,7 +51,7 @@
                      <children>
                         <AnchorPane layoutY="196.0" prefHeight="489.0" prefWidth="220.0" styleClass="left-pane" stylesheets="@z-mainPageDesign.css" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <Button fx:id="scdBtn" layoutY="161.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="220.0" styleClass="second-btn" stylesheets="@z-mainPageDesign.css" text="  Survey Dashboard">
+                              <Button fx:id="scdBtn" onAction ="#switchToDefault" layoutY="161.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="220.0" styleClass="second-btn" stylesheets="@z-mainPageDesign.css" text="  Survey Dashboard">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -90,7 +90,7 @@
                         <FontAwesomeIcon glyphName="SEARCH" layoutX="438.0" layoutY="46.0" />
                         <AnchorPane layoutX="19.0" layoutY="42.0" prefHeight="455.0" prefWidth="480.0" style="-fx-background-color: white;">
                            <children>
-                              <Button fx:id="saveBtn" layoutX="397.0" layoutY="425.0" mnemonicParsing="false" onAction="#save" prefHeight="26.0" prefWidth="90.0" styleClass="saveBtn" stylesheets="@z-QuestionDefault.css" text="        Save" AnchorPane.rightAnchor="5.0">
+                              <Button fx:id="saveBtn" layoutX="397.0" layoutY="425.0" mnemonicParsing="false" onAction="#save" prefHeight="26.0" prefWidth="90.0" styleClass="saveBtn" stylesheets="@z-QuestionDefault.css" text="Save" AnchorPane.rightAnchor="5.0">
                                  <graphic>
                                     <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" />
                                  </graphic>
