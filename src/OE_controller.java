@@ -20,6 +20,8 @@ public class OE_controller extends QuestionPage {
     @FXML
     private ChoiceBox<String> reselection;
 
+    private int childIdController;
+
     @FXML
     private FlowPane questBox;
 
@@ -27,9 +29,7 @@ public class OE_controller extends QuestionPage {
         this.questBox = questBox;
     }
 
-    private int childIdController;
-
-    public void setChildIdController(int childId){
+    public void setChildIdController(int childId) {
         this.childIdController = childId;
     }
 
@@ -42,11 +42,22 @@ public class OE_controller extends QuestionPage {
         deleteNodeByType(childIdController);
         System.out.println(SharedNodeList.getNodeSize());
         System.out.println("This is child Id: " + this.childIdController);
-        ID.totalQ -=1;
+        int id = this.childIdController;
+        delete(id);
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+// Initialize method - if needed
+    }
 
+    private static String question;
+
+    public void setQ() {
+        question = answerTF.getText();
+    }
+
+    public static String getQ() {
+        return question;
     }
 }
     // @FXML

@@ -120,9 +120,14 @@ public class QuestionPage implements Initializable {
 
     protected ComboBox<String> comboBox = new ComboBox<String>();
 
-    public static int Qid = 100;
-    public static int deletedID;
-    public static int[] IDArr = new int[ID.totalQ];
+    private static final int MCQ_TYPE = 1;
+    private static final int OE_TYPE = 2;
+    private static final int LS_TYPE = 3;
+
+    List<Integer> IDList = new ArrayList<>();
+    private static int questionCount = 1;
+
+    JsonObject SC_ori_data = SignInController.retrive_data.SCdata;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -138,35 +143,24 @@ public class QuestionPage implements Initializable {
         NewQuestionChoices.setVisible(true);
     }
 
-    
-    public static void removeTheID() {
-        for (int i = 0; i < IDArr.length; i++) {
-            if (IDArr[i] > deletedID) {
-                IDArr[i] -= 100;
-            } else if (IDArr[i] == deletedID) {
-                removeTheElement(IDArr, i);
-            } else
-                return;
-        }
+    private int generateID(int questionNumber, int questionType) {
+        questionCount++;
+        // Combine the question number and question type to form the ID
+        return Integer.parseInt(String.valueOf(questionNumber) + String.valueOf(questionType));
     }
 
-    public static int[] removeTheElement(int[] arr, int index) {
-        if (arr == null || index < 0 || index >= arr.length) {
-            return arr;
-        }
-
-        int[] anotherArray = new int[arr.length - 1];
-
-        for (int i = 0, k = 0; i < arr.length; i++) {
-
-            if (i == index) {
-                continue;
+    private void renumberSubsequentQuestions(int deletedID) {
+        IDList = ID.getlist();
+        for (int i = 0; i < IDList.size(); i++) {
+            int currentID = IDList.get(i);
+            if (currentID > deletedID) {
+                int questionNumber = i + 1;
+                int questionType = currentID % 10;
+                int newID = generateID(questionNumber, questionType);
+                IDList.set(i, newID);
             }
-
-            anotherArray[k++] = arr[i];
         }
-
-        return anotherArray;
+        ID.setList(IDList);
     }
 
     @FXML
@@ -196,13 +190,14 @@ public class QuestionPage implements Initializable {
 
             System.out.println(SharedNodeList.getNodeSize());
         }
+        ID.setList(IDList);
     }
 
     @FXML
     private void AddNew(ActionEvent e) {
-        System.out.println(IDArr.length);
+
         String addNewQ = (String) NewQuestionChoices.getValue();
-    
+
         try {
 
             int childId = SharedNodeList.generateUniqueChildId();
@@ -228,17 +223,10 @@ public class QuestionPage implements Initializable {
             System.out.println("Error creating or adding node.");
             exception.printStackTrace();
         }
-        int Q = ID.totalQ;
-        int oldId = Qid;
-        int d = Qid % 100;
-        Qid = Qid + 100 - d;
-        for (int i = Q; i > Q - 1; i--) {
-            Q += 1;
-            IDArr[i] = oldId;
-            System.out.println(IDArr[i]);
-        }
-
+        ID.setList(IDList);
     }
+
+    final private String filepath = "DB/survey.json";
 
     @FXML
     private void save(ActionEvent e) throws IOException {
@@ -394,7 +382,7 @@ public class QuestionPage implements Initializable {
                 data.addProperty("type", "OE");
                 data.addProperty("questionId", q);
                 // creating a new question title by static method
-                String questionTitle = OE_controller.getOEData.getQ();
+                String questionTitle = OE_controller.getQ();
                 data.addProperty("Question Title", questionTitle);
                 return data;
 
@@ -402,7 +390,7 @@ public class QuestionPage implements Initializable {
                 // Likert-Scale Question
                 data.addProperty("type", "LS");
                 data.addProperty("questionId", q);
-                data.addProperty("Question Title", LS_controller.getLSData.getQ());
+                data.addProperty("Question Title", LS_controller.getQ());
                 return data;
 
             default:
@@ -468,21 +456,95 @@ public class QuestionPage implements Initializable {
             case "Multiple-Choice":
             case "MCQ":
                 node = connect("MCQ", childId);
-                Qid += 1;
+                int id = generateID(questionCount, MCQ_TYPE);
+                IDList.add(childId, id);
+                ;
+                System.out.println(IDList.size());
+                ID.setID(id);
                 return node;
+
             case "Likert-Scale":
                 node = connect("LS", childId);
-                Qid += 2;
+                int id2 = generateID(questionCount, LS_TYPE);
+                IDList.add(childId, id2);
+                ID.setID(id2);
                 return node;
+
             case "Open-Ended":
                 node = connect("OE", childId);
-                Qid += 3;
+                int id3 = generateID(questionCount, OE_TYPE);
+                IDList.add(childId, id3);
+                ID.setID(id3);
                 return node;
+
             default:
                 System.out.println("Unsupported node type: " + nodeType);
                 return null; // Return null for unsupported node types
         }
     }
+    
+    public void delete(int index) {
+        List<Integer> IDList = ID.getlist();
+    
+        if (IDList.contains(index) || (!IDList.isEmpty() && index >= 0 && index < IDList.size())) {
+            // Remove the ID from the list
+            IDList.remove(Integer.valueOf(index));
+            renumberSubsequentQuestions(index);
+    
+            // Read the existing JSON data from the file
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            File file = new File(filepath);
+    
+            if (file.exists()) {
+                try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
+                    JsonElement root = gson.fromJson(br, JsonElement.class);
+    
+                    if (root != null && root.isJsonObject()) {
+                        JsonObject rootObject = root.getAsJsonObject();
+    
+                        // Remove the question from the JSON structure
+                        JsonArray questionsArray = rootObject.getAsJsonArray("questions");
+                        JsonArray newQuestionsArray = new JsonArray();
+    
+                        // Find the index of the question to remove
+                        for (int i = 0; i < questionsArray.size(); i++) {
+                            JsonObject questionObject = questionsArray.get(i).getAsJsonObject();
+                            int questionId = questionObject.getAsJsonPrimitive("questionId").getAsInt();
+    
+                            if (questionId != index) {
+                                // Add questions to the new array, excluding the one to remove
+                                newQuestionsArray.add(questionObject);
+                            }
+                        }
+    
+                        // Replace the original array with the new one
+                        rootObject.add("questions", newQuestionsArray);
+    
+                        // Write the updated JSON data back to the file
+                        try (FileWriter writer = new FileWriter(filepath)) {
+                            gson.toJson(rootObject, writer);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+    
+                        System.out.println("Question with ID " + index + " deleted from JSON.");
+                    } else {
+                        System.out.println("JSON file is empty or not in a valid format.");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("JSON file does not exist.");
+            }
+    
+            ID.setList(IDList);
+        } else {
+            System.out.println("Question with ID " + index + " not found in the list.");
+        }
+    }
+    
+    
 
     // private void reselection(ActionEvent e) {
     // String choice = (String) comboBox.getValue();
@@ -592,8 +654,8 @@ public class QuestionPage implements Initializable {
             desc = dsc;
         }
     }
-}
 
+}
 //
 // @FXML
 // private void proceedToQuestion(MouseEvent e) throws IOException {

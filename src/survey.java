@@ -1,9 +1,6 @@
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -12,7 +9,10 @@ import com.google.gson.JsonObject;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -22,8 +22,9 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
-public class survey implements Initializable {
+public class survey {
 
     @FXML
     private VBox BigBox;
@@ -81,79 +82,93 @@ public class survey implements Initializable {
         System.exit(0);
     }
 
+    private Scene scene;
+    private Stage stage;
+    private Parent root;
+
     final private String filepath = "DB/survey.json";
 
-    private void getInfor() {
+    @FXML
+    public void SignOut(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("SignIn.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    private int mcqCount = 0;
+    private int lsCount = 0;
+    private int oeCount = 0;
+    int question_amount = 0;
+    private void readFromJson() throws IOException {
         Gson gson = new Gson();
-        File file = new File(filepath);
-        JsonObject _ori_data = sc_survey.get_title.Surveydata;
-        String title;
-        String desc;
-        try {
-            if (file.exists()) {
-                // File exists, read existing data
-                try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
-                    JsonElement root = gson.fromJson(br, JsonElement.class);
+        
 
-                    if (root.isJsonArray()) {
-                        JsonArray jsonArray = root.getAsJsonArray();
-                        System.out.println(_ori_data);
-                        // Iterate over elements in the array
-                        for (JsonElement element : jsonArray) {
-                            JsonObject data = element.getAsJsonObject();
+        try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
+            JsonElement root = gson.fromJson(br, JsonElement.class);
 
-                            // Check if the current JsonObject matches the one you want to get
-                            if (data.equals(_ori_data)) {
-                                title = data.get("title").getAsString();
-                                desc = data.get("description").getAsString();
-                                SurveyDetails sc = new SurveyDetails(title, desc);
-                                System.out.println(title);
-                                // Break the loop since you found the desired JsonObject
+            if (root.isJsonObject()) {
+                JsonObject jsonObject = root.getAsJsonObject();
+                JsonObject surveyInfo = jsonObject.getAsJsonObject("surveyInfo");
+
+                // Check if the current JsonObject matches the one you want to get
+                if (surveyInfo != null) {
+                    String title = surveyInfo.get("title").getAsString();
+                    String desc = surveyInfo.get("description").getAsString();
+                    String date = surveyInfo.get("datePosted").getAsString();
+                }
+
+                JsonArray questionArray = jsonObject.getAsJsonArray("questions");
+                if (questionArray != null) {
+                    question_amount = questionArray.size();
+
+                    for (JsonElement element : questionArray) {
+                        JsonObject questionObject = element.getAsJsonObject();
+
+                        JsonObject questionDetails = questionObject.getAsJsonObject("questionDetails");
+                        String type = questionDetails.get("type").getAsString();
+                        int questionId = questionDetails.get("questionId").getAsInt();
+                        JsonObject question_array = questionDetails.getAsJsonObject("questionArray");
+
+                        survey_data get_data = new survey_data();
+                        get_data.determine(type, question_array);
+                        
+                        switch (type) {
+                            case "MCQ":
+                                mcqCount++;
                                 break;
-                            }
+                            case "OE":
+                                oeCount++;
+                                break;
+                            case "LS":
+                                lsCount++;
+                                break;
+                            default:
+                                break;
                         }
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        surveyTitle.setText(SurveyDetails.getTitle());
-        description.setText(SurveyDetails.getDesc());
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle bl) {
-
-        getInfor();
+    private void construct() throws IOException{
+        readFromJson();
+        
     }
 
-    public static class SurveyDetails {
-        private static String title;
-        private static String desc;
+    
+    public int getMcqCount() {
+        return mcqCount;
+    }
 
-        public SurveyDetails(String title, String desc) {
-            this.title = title;
-            this.desc = desc;
-        }
+    public int getLsCount() {
+        return lsCount;
+    }
 
-        public static String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String ttle) {
-            title = ttle;
-        }
-
-        public static String getDesc() {
-            return desc;
-        }
-
-        public void setDesc(String dsc) {
-            desc = dsc;
-        }
+    public int getOeCount() {
+        return oeCount;
     }
 
 }

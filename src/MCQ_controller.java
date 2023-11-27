@@ -1,5 +1,8 @@
+
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -44,6 +47,7 @@ public class MCQ_controller extends QuestionPage {
 
     @FXML
     private VBox vbox1;
+
     // @FXML
     // private ComboBox<String> reselection;
     // private ObservableList<String> selection;
@@ -79,7 +83,6 @@ public class MCQ_controller extends QuestionPage {
     private void AddMore(ActionEvent e) {
 
         vbox1.getChildren().add(children_orphan());
-        getMCQData.totalSmallMCQ += 1;
         // if (vbox1.getChildren().size() == 10) {
         // addBtn.setDisable(true);
         // limitLabel.setText("Reach Options Limit!!");
@@ -112,6 +115,7 @@ public class MCQ_controller extends QuestionPage {
         });
 
         ophbox2.getChildren().addAll(opButton2, opTxt2, del2);
+
         return ophbox2;
     }
 
@@ -127,11 +131,11 @@ public class MCQ_controller extends QuestionPage {
 
     @FXML
     public void delete(ActionEvent event) throws IOException {
-        deleteNodeByType(childIdController);
-        System.out.println(SharedNodeList.getNodeSize());
-        System.out.println("This is child Id: " + this.childIdController);
-        ID.totalQ -= 1;
-        getMCQData.totalSmallMCQ -= 1;
+    
+            deleteNodeByType(childIdController);
+            System.out.println(SharedNodeList.getNodeSize());
+            System.out.println("This is child Id: " + this.childIdController);
+        
     }
 
     // @FXML
@@ -149,30 +153,20 @@ public class MCQ_controller extends QuestionPage {
     public void initialize(URL location, ResourceBundle resources) {
     }
 
-    public class getMCQData{
-        public static int totalSmallMCQ = 1;
-        public static String option_title;
+public static class getMCQData {
 
-        public getMCQData(int totalSmallMCQ, String option_title){
-            MCQ_controller.getMCQData.totalSmallMCQ = totalSmallMCQ;
-            MCQ_controller.getMCQData.option_title = option_title;
+        public static Map<Integer, String> smallMCQOptions = new HashMap<>();
+        private static int idCounter = 1; // Counter for generating IDs
+
+        public static void addOption(String optionTitle) {
+            smallMCQOptions.put(idCounter, optionTitle);
+            idCounter++;
         }
 
-        public static void setOption(int totlSmallMCQ){
-            totalSmallMCQ = totlSmallMCQ;
+        public static Map<Integer, String> getOptions() {
+            return new HashMap<>(smallMCQOptions);
         }
 
-        public static int getOption(){
-            return totalSmallMCQ;
-        }
-
-        public static void setOptionTitle(String op){
-            option_title = op;
-        }
-
-        public static String getOptionTitle(){
-            return option_title;
-        }
     }
-    
+
 }

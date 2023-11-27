@@ -39,17 +39,17 @@ public class LS_controller extends QuestionPage {
     @FXML
     private FlowPane questBox;
 
-    public void setQuestBox(FlowPane questBox){
+    public void setQuestBox(FlowPane questBox) {
         this.questBox = questBox;
     }
 
     private int childIdController;
 
-    public void setChildIdController(int childId){
+    public void setChildIdController(int childId) {
         this.childIdController = childId;
     }
 
-    public int getChildIdController(){
+    public int getChildIdController() {
         return this.childIdController;
     }
 
@@ -88,7 +88,8 @@ public class LS_controller extends QuestionPage {
         deleteNodeByType(childIdController);
         System.out.println(SharedNodeList.getNodeSize());
         System.out.println("This is child Id: " + this.childIdController);
-        ID.totalQ -=1;
+        int id = this.childIdController;
+        delete(id);
     }
     // @FXML
     // public void delete(ActionEvent event) throws IOException {
@@ -102,7 +103,17 @@ public class LS_controller extends QuestionPage {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // rangeCB.getItems().addAll(range);
+        rangeCB.getItems().addAll(range);
+    }
+
+    public static String Question;
+
+    public static void setQ(String Q) {
+        Question = Q;
+    }
+
+    public static String getQ() {
+        return Question;
     }
 
     // @FXML
