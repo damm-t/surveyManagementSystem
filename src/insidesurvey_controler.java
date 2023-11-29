@@ -169,6 +169,6 @@ public class insidesurvey_controler extends LS_controller {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        rangeCB.getItems().addAll(range);
+        
     }
 }

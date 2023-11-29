@@ -23,6 +23,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
@@ -35,6 +36,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class QuestionPage implements Initializable {
 
@@ -128,6 +130,19 @@ public class QuestionPage implements Initializable {
     private static int questionCount = 1;
 
     JsonObject SC_ori_data = SignInController.retrive_data.SCdata;
+
+    private Scene scene;
+    private Stage stage;
+    private Parent root;
+
+    @FXML
+        void logOut(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("SignIn.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

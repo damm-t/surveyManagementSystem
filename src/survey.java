@@ -133,7 +133,7 @@ public class survey extends QuestionPage {
                 if (surveyInfo != null) {
                     String title = surveyInfo.get("title").getAsString();
                     String desc = surveyInfo.get("description").getAsString();
-                    String date = surveyInfo.get("created_date").getAsString();
+                    String date = surveyInfo.get("createdDate").getAsString();
                     sd.setSurveyTitle(title);
                     sd.setSurveyDescription(desc);
                     sd.setSurveyDate(date);

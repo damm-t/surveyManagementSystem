@@ -25,5 +25,32 @@
     "email": "voon@sd.taylors.edu.my",
     "username": "babamama",
     "password": "123"
+  },
+  {
+    "firstName": "ling",
+    "lastName": "chow",
+    "faculty": "cs",
+    "phoneNumber": "3456789",
+    "email": "wkjefkwfb",
+    "username": "ling",
+    "password": "123"
+  },
+  {
+    "firstName": "wq",
+    "lastName": "ng",
+    "faculty": "sc",
+    "phoneNumber": "3434",
+    "email": "wqng@sd.taylors.edu.my",
+    "username": "wqng",
+    "password": "123"
+  },
+  {
+    "firstName": "wq",
+    "lastName": "ng",
+    "faculty": "cs",
+    "phoneNumber": "12324",
+    "email": "wq@sd.taylors.edu.my",
+    "username": "wq",
+    "password": "123"
   }
 ]

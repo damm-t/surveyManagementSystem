@@ -8,9 +8,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
@@ -20,8 +23,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -41,6 +42,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
@@ -151,6 +153,13 @@ public class AdminScController implements Initializable {
     @FXML
     private TextField tfUsername;
 
+    
+    @FXML
+    private TextField search;
+
+    @FXML
+    private Button searchBtn;
+
     @FXML
     void close(ActionEvent event) {
         System.exit(0);
@@ -177,15 +186,6 @@ public class AdminScController implements Initializable {
     @FXML
     void switchToUser(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("admin_userDashboard.fxml"));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    @FXML
-    void logOut(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(getClass().getResource("SignIn.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -222,6 +222,12 @@ public class AdminScController implements Initializable {
                 jsonArray = new JSONArray();
             }
 
+            String pic = "";
+            for(int i = 0 ; i < jsonArray.length(); i ++ ) {
+                JSONObject olddata = jsonArray.getJSONObject(i);
+                pic = olddata.getString("picture");
+            }
+
             // Create a new JSON object for the data entered by the user
             JSONObject newEntry = new JSONObject();
             newEntry.put("firstName", tfFName.getText());
@@ -231,6 +237,7 @@ public class AdminScController implements Initializable {
             newEntry.put("phoneNumber", tfPhoneNo.getText());
             newEntry.put("username", tfUsername.getText());
             newEntry.put("password", tfPassword.getText());
+            newEntry.put("picture", pic);
             // clearTextFields();
 
             // Add the new entry to the existing array
@@ -249,8 +256,7 @@ public class AdminScController implements Initializable {
                     newEntry.getString("faculty"),
                     newEntry.getString("email"),
                     newEntry.getString("phoneNumber"),
-                    newEntry.getString("password"),
-                    newEntry.getString("picture"));
+                    newEntry.getString("password"));
             clearTextFields();
 
             Table.getItems().add(data);
@@ -287,13 +293,13 @@ public class AdminScController implements Initializable {
         Profile selectedSc = Table.getSelectionModel().getSelectedItem();
     
         if (selectedSc != null) {
-            inputFname = AdminScController.Profile.getFirstName();
-            inputLname = AdminScController.Profile.getLastName();
-            inputPhoneNo = AdminScController.Profile.getPhoneNo();
-            inputEmail = AdminScController.Profile.getEmail();
-            inputFaculty = AdminScController.Profile.getFaculty();
-            inputUsername = AdminScController.Profile.getFirstName();
-            inputPassword = AdminScController.Profile.getPassword();
+            inputFname = selectedSc.getFirstName();
+            inputLname = selectedSc.getLastName();
+            inputPhoneNo = selectedSc.getPhoneNo();
+            inputEmail = selectedSc.getEmail();
+            inputFaculty = selectedSc.getFaculty();
+            inputUsername = selectedSc.getUsername();
+            inputPassword = selectedSc.getPassword();
         }
     
         try (BufferedReader br = new BufferedReader(new FileReader("DB/surveycreator.json"))) {
@@ -355,9 +361,8 @@ public class AdminScController implements Initializable {
                         newEntry.getString("lastName"),
                         newEntry.getString("faculty"),
                         newEntry.getString("email"),
-                        newEntry.getString("phoneNumber"),
-                        newEntry.getString("password"),
-                        newEntry.getString("picture"));
+                            newEntry.getString("phoneNumber"),
+                            newEntry.getString("password"));
     
                     Table.getItems().set(Table.getSelectionModel().getSelectedIndex(), newData);
     
@@ -432,7 +437,7 @@ public class AdminScController implements Initializable {
                             removedProfile.getLastName().equals(jsonObject.getString("lastName")) &&
                             removedProfile.getPassword().equals(jsonObject.getString("password")) &&
                             removedProfile.getPhoneNo().equals(jsonObject.getString("phoneNumber")) &&
-                            removedProfile.getFirstName().equals(jsonObject.getString("username"))) {
+                            removedProfile.getUsername().equals(jsonObject.getString("username"))) {
                         // Remove the matched object from the JSON array
                         jsonArray.remove(i);
                         break; // No need to continue iterating once the object is found
@@ -489,7 +494,7 @@ public class AdminScController implements Initializable {
             tfFaculty.setText(String.valueOf(clickedSc.getFaculty()));
             tfEmail.setText(String.valueOf(clickedSc.getEmail()));
             tfPhoneNo.setText(String.valueOf(clickedSc.getPhoneNo()));
-            tfUsername.setText(String.valueOf(clickedSc.getFirstName()));
+            tfUsername.setText(String.valueOf(clickedSc.getUsername()));
             tfPassword.setText(String.valueOf(clickedSc.getPassword()));
         }
     }
@@ -503,28 +508,44 @@ public class AdminScController implements Initializable {
         phoneNoCol.setCellValueFactory(new PropertyValueFactory<>("phoneNo"));
         emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
         facultyCol.setCellValueFactory(new PropertyValueFactory<>("faculty"));
-        // passwordCol.setCellValueFactory(new PropertyValueFactory<>("password"));
+        passwordCol.setCellValueFactory(new PropertyValueFactory<>("password"));
 
         // Call btnshown to populate the table
         btnshown(null);
+
+        // Set up the search functionality
+        observablelist = Table.getItems();
+        searchBtn.setOnAction(this::searchText);
+    }
+
+    @FXML
+    private void searchText(ActionEvent event) {
+        String searchFirstName = search.getText().toLowerCase();
+
+        // Filter the data based on the entered first name
+        ObservableList<Profile> filteredData = observablelist.filtered(profile ->
+                profile.getFirstName().toLowerCase().contains(searchFirstName));
+
+        // Update the table with the filtered data
+        Table.setItems(filteredData);
+        Table.refresh();
     }
 
     @FXML
     private void btnshown(ActionEvent event) {
         ObservableList<Profile> data = FXCollections.observableArrayList();
 
-        // // Initialize columns
-        // idCol = new TableColumn<>("Id");
-        // firstNameCol = new TableColumn<>("First Name");
-        // lastNameCol = new TableColumn<>("Last Name");
-        // facultyCol = new TableColumn<>("Faculty");
-        // emailCol = new TableColumn<>("Email");
-        // phoneNoCol = new TableColumn<>("Contact Number");
-        // passwordCol = new TableColumn<>("Password");
+        // Initialize columns
+        idCol = new TableColumn<>("Id");
+        firstNameCol = new TableColumn<>("First Name");
+        lastNameCol = new TableColumn<>("Last Name");
+        facultyCol = new TableColumn<>("Faculty");
+        emailCol = new TableColumn<>("Email");
+        phoneNoCol = new TableColumn<>("Contact Number");
+        passwordCol = new TableColumn<>("Password");
 
-        // // Add columns to the table
-        // Table.getColumns().addAll(idCol, firstNameCol, lastNameCol, facultyCol,
-        // emailCol, phoneNoCol, passwordCol);
+        // Add columns to the table
+        Table.getColumns().addAll(idCol, firstNameCol, lastNameCol, facultyCol, emailCol, phoneNoCol, passwordCol);
 
         try (BufferedReader br = new BufferedReader(new FileReader("DB/surveycreator.json"))) {
             JsonParser parser = new JsonParser();
@@ -540,7 +561,6 @@ public class AdminScController implements Initializable {
                 String PhoneNo = jsonObject.get("phoneNumber").getAsString();
                 String Email = jsonObject.get("email").getAsString();
                 String Password = jsonObject.get("password").getAsString();
-                String Picture = jsonObject.get("picture").getAsString();
                 // String username = jsonObject.get("username").getAsString();
                 // String pic = jsonObject.get("pic").getAsString();
                 // String password = jsonObject.get("password").getAsString();
@@ -557,7 +577,7 @@ public class AdminScController implements Initializable {
                 // }
 
                 // Add data to the ObservableList
-                data.add(new Profile(username, Fname, Lname, Faculty, Email, PhoneNo, Password, Picture));
+                data.add(new Profile(username, Fname, Lname, Faculty, Email, PhoneNo, Password));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -581,7 +601,8 @@ public class AdminScController implements Initializable {
             FileChooser.ExtensionFilter extFilterjpg = new FileChooser.ExtensionFilter("jpg files (*.jpg)", "*.jpg");
             FileChooser.ExtensionFilter extFilterPNG = new FileChooser.ExtensionFilter("PNG files (*.PNG)", "*.PNG");
             FileChooser.ExtensionFilter extFilterpng = new FileChooser.ExtensionFilter("png files (*.png)", "*.png");
-            fileChooser.getExtensionFilters().addAll(extFilterJPG, extFilterjpg, extFilterPNG, extFilterpng);
+            fileChooser.getExtensionFilters()
+                    .addAll(extFilterJPG, extFilterjpg, extFilterPNG, extFilterpng);
 
             // Show open file dialog
             File file = fileChooser.showOpenDialog(null);
@@ -589,10 +610,10 @@ public class AdminScController implements Initializable {
                 BufferedImage bufferedImage = ImageIO.read(file);
                 WritableImage image = SwingFXUtils.toFXImage(bufferedImage, null);
                 profilePic.setImage(image);
-                // profilePic.setFitWidth(65);
-                // profilePic.setFitHeight(65);
-                // profilePic.setLayoutX(22.0);
-                // profilePic.setLayoutY(28.0);
+                profilePic.setFitWidth(65);
+                profilePic.setFitHeight(65);
+                profilePic.setLayoutX(22.0);
+                profilePic.setLayoutY(28.0);
                 profilePic.setCache(true);
                 try (FileInputStream fin = new FileInputStream(file)) {
                     ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -617,173 +638,84 @@ public class AdminScController implements Initializable {
         });
     }
 
-    // function for saving pic
     private void savingpic(String pic) throws IOException {
         Alert alert;
-
-        String Fname = Profile.getFirstName();
-        String Lname = Profile.getLastName();
-        String PN = Profile.getPhoneNo();
-        String Email = Profile.getEmail();
-        String Faculty = Profile.getFaculty();
-        String Username = Profile.getFirstName();
-        String Password = Profile.getPassword();
-        Profile.setPicture(pic);
-
-        Profile input_data = new Profile(Fname, Lname, Faculty, PN, Email, Username, Password, pic);
-
-        if (save(input_data)) {
-            System.out.println("Data have been save");
-            alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Imform");
+        String[] data = Files.readAllLines(Paths.get(filepath)).get(0).split(" , ");
+        String pic_data = data[6];
+        if (pic_data.equals(null))
+            data[6] = pic;
+        else {
+            alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation");
             alert.setHeaderText(null);
-            alert.setContentText("The data have been saved");
-        } else {
-            alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Alert");
-            alert.setHeaderText(null);
-            alert.setContentText("The data is not save get contact with admin .249");
-        }
-    }
+            alert.setContentText("The picture will be replace");
 
-    private boolean save(Profile profile) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        File file = new File(filepath);
-
-        try {
-
-            if (file.exists()) {
-                // File exists, read existing data
-                try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
-                    JsonElement root = gson.fromJson(br, JsonElement.class);
-
-                    if (root.isJsonArray()) {
-                        JsonArray jsonArray = root.getAsJsonArray();
-
-                        // Iterate over elements in the array
-                        for (JsonElement element : jsonArray) {
-                            JsonObject data = element.getAsJsonObject();
-                            // Update the fields of the JsonObject with values from SCupdate
-                            data.addProperty("firstName", profile.getFirstName());
-                            data.addProperty("lastName", profile.getLastName());
-                            data.addProperty("faculty", profile.getFaculty());
-                            data.addProperty("phoneNumber", profile.getPhoneNo());
-                            data.addProperty("email", profile.getEmail());
-                            data.addProperty("username", profile.getUsername());
-                            data.addProperty("password", profile.getPassword());
-                            data.addProperty("picture", profile.getPicture());
-
-                            // Break the loop since you found and updated the desired JsonObject
-                            break;
-                        }
-
-                        // Write the updated JSON array back to the file
-                        try (FileWriter writer = new FileWriter(filepath)) {
-                            gson.toJson(jsonArray, writer);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            return false;
-                        }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return false;
-                }
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                data[6] = pic;
+            } else {
+                return;
             }
-            System.out.println("Data has been updated in " + filepath);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
         }
+        Files.write(Paths.get(filepath), String.join(" , ", data).getBytes());
+        // for decoding
+        // String profilePic = data[5];
+        // byte[] decodedBytes = Base64.getDecoder().decode(profilePic);
+        // Files.write(Paths.get("txtfiles/SC.txt"), decodedBytes);
     }
+
+    /*
+     * //
+     * //initialize the profile part
+     */ //
 
     public static class Profile {
 
-        private static String firstName;
-        private static String lastName;
-        private static String faculty;
-        private static String phoneNo;
-        private static String email;
-        private static String password;
-        private static String username;
-        private static String picture;
+        private String username;
+        private String firstName;
+        private String lastName;
+        private String faculty;
+        private String phoneNo;
+        private String email;
+        private String password;
 
-        public Profile(String pic, String firstName, String lastName, String faculty, String email, String phoneNo,
-                String username, String password) {
-            AdminScController.Profile.picture = pic;
-            AdminScController.Profile.username = username;
-            AdminScController.Profile.firstName = firstName;
-            AdminScController.Profile.lastName = lastName;
-            AdminScController.Profile.phoneNo = phoneNo;
-            AdminScController.Profile.faculty = faculty;
-            AdminScController.Profile.email = email;
-            AdminScController.Profile.phoneNo = phoneNo;
-            AdminScController.Profile.password = password;
+        public Profile(String username, String firstName, String lastName, String faculty, String email, String phoneNo, String password) {
+            this.username = username;
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.phoneNo = phoneNo;
+            this.faculty = faculty;
+            this.email = email;
+            this.phoneNo = phoneNo;
+            this.password = password;
         }
 
         public String getUsername() {
             return username;
         }
 
-        public static String getFirstName() {
+        public String getFirstName() {
             return firstName;
         }
 
-        public static String getLastName() {
+        public String getLastName() {
             return lastName;
         }
 
-        public static String getPhoneNo() {
+        public String getPhoneNo() {
             return phoneNo;
         }
 
-        public static String getEmail() {
+        public String getEmail() {
             return email;
         }
 
-        public static String getFaculty() {
+        public String getFaculty() {
             return faculty;
         }
 
-        public static String getPassword() {
+        public String getPassword() {
             return password;
-        }
-
-        public void setUsername(String usrname) {
-            username = usrname;
-        }
-
-        public void setFirstName(String fistName) {
-            firstName = fistName;
-        }
-
-        public void setLastName(String latName) {
-            lastName = latName;
-        }
-
-        public void setPhoneNo(String phnNo) {
-            phoneNo = phnNo;
-        }
-
-        public void setEmail(String emil) {
-            email = emil;
-        }
-
-        public void setFaculty(String faclty) {
-            faculty = faclty;
-        }
-
-        public void setPassword(String pasword) {
-            password = pasword;
-        }
-
-        public static void setPicture(String pic) {
-            picture = pic;
-        }
-
-        public String getPicture() {
-            return picture;
         }
     }
 }

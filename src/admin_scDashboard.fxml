@@ -20,31 +20,22 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-   prefHeight="577.0" prefWidth="740.0" xmlns="http://javafx.com/javafx/20.0.1"
-   xmlns:fx="http://javafx.com/fxml/1" fx:controller="AdminScController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="740.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AdminScController">
    <children>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
-            <BorderPane layoutX="-1.0" prefHeight="596.0" prefWidth="740.0" styleClass="background"
-               stylesheets="@z-mainPageDesign.css" AnchorPane.bottomAnchor="0.0"
-               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <BorderPane layoutX="-1.0" prefHeight="596.0" prefWidth="740.0" styleClass="background" stylesheets="@z-mainPageDesign.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <top>
                   <AnchorPane prefHeight="21.0" prefWidth="740.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane layoutY="-1.0" prefHeight="38.0" prefWidth="740.0"
-                           styleClass="top-pane" stylesheets="@z-mainPageDesign.css">
+                        <AnchorPane layoutY="-1.0" prefHeight="38.0" prefWidth="740.0" styleClass="top-pane" stylesheets="@z-mainPageDesign.css">
                            <children>
-                              <Button fx:id="close" layoutX="5.0" layoutY="6.0"
-                                 mnemonicParsing="false" onAction="#close" styleClass="close"
-                                 stylesheets="@z-mainPageDesign.css" text="X" textFill="WHITE">
+                              <Button fx:id="close" layoutX="5.0" layoutY="6.0" mnemonicParsing="false" onAction="#close" styleClass="close" stylesheets="@z-mainPageDesign.css" text="X" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="logOut" onAction="#logOut" layoutX="668.0" layoutY="6.0"
-                                 mnemonicParsing="false" styleClass="log-out"
-                                 stylesheets="@z-mainPageDesign.css" text="Log Out" textFill="WHITE">
+                              <Button fx:id="logOut" layoutX="668.0" layoutY="6.0" mnemonicParsing="false" styleClass="log-out" stylesheets="@z-mainPageDesign.css" text="Log Out" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -55,18 +46,11 @@
                   </AnchorPane>
                </top>
                <left>
-                  <AnchorPane prefHeight="487.0" prefWidth="218.0"
-                     stylesheets="@z-mainPageDesign.css" BorderPane.alignment="CENTER">
+                  <AnchorPane prefHeight="487.0" prefWidth="218.0" stylesheets="@z-mainPageDesign.css" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane layoutY="196.0" prefHeight="489.0" prefWidth="220.0"
-                           styleClass="left-pane" stylesheets="@z-mainPageDesign.css"
-                           AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0"
-                           AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane layoutY="196.0" prefHeight="489.0" prefWidth="220.0" styleClass="left-pane" stylesheets="@z-mainPageDesign.css" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <Button fx:id="fsBtn" layoutY="161.0" mnemonicParsing="false"
-                                 onAction="#switchToSC" prefHeight="48.0" prefWidth="220.0"
-                                 styleClass="first-btn" stylesheets="@z-mainPageDesign.css"
-                                 text="  Survey Creator Dashboard">
+                              <Button fx:id="fsBtn" layoutY="161.0" mnemonicParsing="false" onAction="#switchToSC" prefHeight="48.0" prefWidth="220.0" styleClass="first-btn" stylesheets="@z-mainPageDesign.css" text="  Survey Creator Dashboard">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -74,22 +58,15 @@
                                     <FontAwesomeIcon glyphName="USER" size="22" />
                                  </graphic>
                               </Button>
-                              <Button fx:id="scdBtn" layoutY="210.0" mnemonicParsing="false"
-                                 onAction="#switchToSurvey" prefHeight="48.0" prefWidth="220.0"
-                                 styleClass="second-btn" stylesheets="@z-mainPageDesign.css"
-                                 text="  Survey Dashboard">
+                              <Button fx:id="scdBtn" layoutY="210.0" mnemonicParsing="false" onAction="#switchToSurvey" prefHeight="48.0" prefWidth="220.0" styleClass="second-btn" stylesheets="@z-mainPageDesign.css" text="  Survey Dashboard">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
                                  <graphic>
-                                    <FontAwesomeIcon glyphName="BOOK" selectionEnd="3"
-                                       selectionStart="3" size="22" />
+                                    <FontAwesomeIcon glyphName="BOOK" selectionEnd="3" selectionStart="3" size="22" />
                                  </graphic>
                               </Button>
-                              <Button fx:id="thirdBtn" layoutY="259.0" mnemonicParsing="false"
-                                 onAction="#switchToUser" prefHeight="48.0" prefWidth="220.0"
-                                 styleClass="third-btn" stylesheets="@z-mainPageDesign.css"
-                                 text="  User Dashboard">
+                              <Button fx:id="thirdBtn" layoutY="259.0" mnemonicParsing="false" onAction="#switchToUser" prefHeight="48.0" prefWidth="220.0" styleClass="third-btn" stylesheets="@z-mainPageDesign.css" text="  User Dashboard">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -97,30 +74,22 @@
                                     <FontAwesomeIcon glyphName="USERS" size="21" />
                                  </graphic>
                               </Button>
-                              <Pane fx:id="profileCard" prefHeight="161.0" prefWidth="220.0"
-                                 styleClass="profile_bar" stylesheets="@z-mainPageDesign.css">
+                              <Pane fx:id="profileCard" prefHeight="161.0" prefWidth="220.0" styleClass="profile_bar" stylesheets="@z-mainPageDesign.css">
                                  <children>
-                                    <Label fx:id="gmail" layoutX="23.0" layoutY="108.0"
-                                       text="example@z-sd.taylors.edu.my" textFill="WHITE">
+                                    <Label fx:id="gmail" layoutX="23.0" layoutY="108.0" text="admin@gmail.com" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="12.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="user" layoutX="23.0" layoutY="124.0"
-                                       text="Administrator" textFill="WHITE" />
-                                    <AnchorPane layoutX="22.0" layoutY="28.0" prefHeight="65.0"
-                                       prefWidth="65.0" styleClass="profile-pic"
-                                       stylesheets="@z-mainPageDesign.css">
+                                    <Label fx:id="user" layoutX="23.0" layoutY="124.0" text="Administrator" textFill="WHITE" />
+                                    <AnchorPane layoutX="22.0" layoutY="28.0" prefHeight="65.0" prefWidth="65.0" styleClass="profile-pic" stylesheets="@z-mainPageDesign.css">
                                        <children>
-                                          <ImageView fx:id="profilePic" fitHeight="68.0"
-                                             fitWidth="67.0" layoutX="-1.0" layoutY="-4.0"
-                                             pickOnBounds="true" preserveRatio="true" />
+                                          <ImageView fx:id="profilePic" fitHeight="68.0" fitWidth="67.0" layoutX="-1.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true" />
                                        </children>
                                     </AnchorPane>
                                  </children>
                               </Pane>
-                              <ImageView fitHeight="48.0" fitWidth="160.0" layoutX="17.0"
-                                 layoutY="431.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="48.0" fitWidth="160.0" layoutX="17.0" layoutY="431.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../images/taylors-logo-latest.png" />
                                  </image>
@@ -131,45 +100,29 @@
                   </AnchorPane>
                </left>
                <center>
-                  <AnchorPane layoutX="165.0" prefHeight="577.0" prefWidth="364.0"
-                     BorderPane.alignment="CENTER">
+                  <AnchorPane layoutX="165.0" prefHeight="577.0" prefWidth="364.0" BorderPane.alignment="CENTER">
                      <children>
                         <Label layoutX="25.0" layoutY="29.0" text="Survey Creators:">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <TextField layoutX="188.0" layoutY="28.0" prefHeight="27.0"
-                           prefWidth="238.0" promptText="Search" style="-fx-background-radius: 45;" />
-                        <AnchorPane layoutX="14.0" layoutY="77.0" prefHeight="424.0"
-                           prefWidth="460.0"
-                           style="-fx-background-color: WHITE; -fx-background-radius: 12;">
+                        <TextField fx:id="search" layoutX="188.0" layoutY="28.0" prefHeight="27.0" prefWidth="238.0" promptText="Search" style="-fx-background-radius: 45;" />
+                        <AnchorPane layoutX="14.0" layoutY="77.0" prefHeight="424.0" prefWidth="460.0" style="-fx-background-color: WHITE; -fx-background-radius: 12;">
                            <children>
-                              <ScrollPane prefHeight="179.0" prefWidth="460.0"
-                                 styleClass="background">
+                              <ScrollPane prefHeight="179.0" prefWidth="460.0" styleClass="background">
                                  <content>
-                                    <AnchorPane layoutX="10.0" layoutY="85.0" minHeight="0.0"
-                                       minWidth="0.0" prefHeight="178.0" prefWidth="442.0">
+                                    <AnchorPane layoutX="10.0" layoutY="85.0" minHeight="0.0" minWidth="0.0" prefHeight="178.0" prefWidth="442.0">
                                        <children>
-                                          <TableView fx:id="Table" layoutX="-1.0" layoutY="-1.0"
-                                             onMouseClicked="#rowClicked" prefHeight="177.0"
-                                             prefWidth="446.0">
+                                          <TableView fx:id="Table" layoutX="-1.0" layoutY="-1.0" onMouseClicked="#rowClicked" prefHeight="177.0" prefWidth="446.0">
                                              <columns>
-                                                <TableColumn fx:id="firstNameCol"
-                                                   prefWidth="67.20000839233398" text="First Name" />
-                                                <TableColumn fx:id="lastNameCol"
-                                                   prefWidth="69.5999755859375" text="Last Name" />
-                                                <TableColumn fx:id="facultyCol"
-                                                   prefWidth="56.79998779296875" text="Faculty" />
-                                                <TableColumn fx:id="phoneNoCol"
-                                                   prefWidth="68.0001220703125" text="Phone No" />
-                                                <TableColumn fx:id="emailCol"
-                                                   prefWidth="87.19999694824219" text="Email" />
-                                                <TableColumn fx:id="idCol"
-                                                   prefWidth="36.00000077486038" text="SCid" />
-                                                <TableColumn fx:id="passwordCol"
-                                                   maxWidth="86.39996337890625"
-                                                   prefWidth="70.39990234375" text="Password" />
+                                                <TableColumn fx:id="firstNameCol" prefWidth="67.20000839233398" text="First Name" />
+                                                <TableColumn fx:id="lastNameCol" prefWidth="69.5999755859375" text="Last Name" />
+                                                <TableColumn fx:id="facultyCol" prefWidth="56.79998779296875" text="Faculty" />
+                                                <TableColumn fx:id="phoneNoCol" prefWidth="68.0001220703125" text="Phone No" />
+                                                <TableColumn fx:id="emailCol" prefWidth="87.19999694824219" text="Email" />
+                                                <TableColumn fx:id="idCol" prefWidth="36.00000077486038" text="SCid" />
+                                                <TableColumn fx:id="passwordCol" maxWidth="86.39996337890625" prefWidth="70.39990234375" text="Password" />
                                              </columns>
                                           </TableView>
                                        </children>
@@ -208,9 +161,7 @@
                               <TextField fx:id="tfEmail" layoutX="105.0" layoutY="320.0" />
                               <TextField fx:id="tfUsername" layoutX="105.0" layoutY="352.0" />
                               <PasswordField fx:id="tfPassword" layoutX="105.0" layoutY="385.0" />
-                              <AnchorPane layoutX="298.0" layoutY="231.0" prefHeight="122.0"
-                                 prefWidth="116.0"
-                                 style="-fx-background-color: white; -fx-background-radius: 10;">
+                              <AnchorPane layoutX="298.0" layoutY="231.0" prefHeight="122.0" prefWidth="116.0" style="-fx-background-color: white; -fx-background-radius: 10;">
                                  <effect>
                                     <DropShadow height="10.0" radius="4.5" width="10.0">
                                        <color>
@@ -219,19 +170,13 @@
                                     </DropShadow>
                                  </effect>
                                  <children>
-                                    <Button fx:id="btnUpload" layoutY="94.0" mnemonicParsing="false"
-                                       onAction="#UploadImageActionPerformed" prefHeight="27.0"
-                                       prefWidth="119.0" text="Upload" />
-                                    <ImageView fx:id="profilePicUpload" fitHeight="94.0"
-                                       fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
+                                    <Button fx:id="btnUpload" layoutY="94.0" mnemonicParsing="false" onAction="#UploadImageActionPerformed" prefHeight="27.0" prefWidth="119.0" text="Upload" />
+                                    <ImageView fx:id="profilePicUpload" fitHeight="94.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
                                  </children>
                               </AnchorPane>
-                              <Button fx:id="btnDelete" layoutX="388.0" layoutY="377.0"
-                                 mnemonicParsing="false" onAction="#btnDelete" text="Delete" />
-                              <Button fx:id="btnUpdate" layoutX="325.0" layoutY="377.0"
-                                 mnemonicParsing="false" onAction="#updateBtn" text="Update" />
-                              <Button fx:id="addbtn" layoutX="267.0" layoutY="377.0"
-                                 mnemonicParsing="false" onAction="#addBtn" text="Add" />
+                              <Button fx:id="btnDelete" layoutX="388.0" layoutY="377.0" mnemonicParsing="false" onAction="#btnDelete" text="Delete" />
+                              <Button fx:id="btnUpdate" layoutX="325.0" layoutY="377.0" mnemonicParsing="false" onAction="#updateBtn" text="Update" />
+                              <Button fx:id="addbtn" layoutX="267.0" layoutY="377.0" mnemonicParsing="false" onAction="#addBtn" text="Add" />
                               <Label layoutX="15.0" layoutY="357.0" text="ID/Username:">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
@@ -244,7 +189,7 @@
                               </Label>
                            </children>
                         </AnchorPane>
-                        <FontAwesomeIcon glyphName="SEARCH" layoutX="438.0" layoutY="46.0" />
+                        <Button fx:id="searchBtn" layoutX="434.0" layoutY="29.0" mnemonicParsing="false" text="Button" />
                      </children>
                   </AnchorPane>
                </center>
