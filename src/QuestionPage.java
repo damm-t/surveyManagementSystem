@@ -4,10 +4,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -136,7 +140,7 @@ public class QuestionPage implements Initializable {
     private Parent root;
 
     @FXML
-        void logOut(ActionEvent event) throws IOException {
+    void logOut(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("SignIn.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -253,123 +257,173 @@ public class QuestionPage implements Initializable {
         save();
     }
 
-    private JsonObject save() {
+    private void save() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         File file = new File(filepath);
-        JsonObject result = new JsonObject();
 
-        try {
-            if (file.exists()) {
-                // File exists, read existing data
-                try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
-                    JsonElement root = gson.fromJson(br, JsonElement.class);
+        try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
 
-                    if (root != null && root.isJsonObject()) {
-                        JsonObject rootObject = root.getAsJsonObject();
+            
+            // Parse the JSON file into a JsonArray
+            JsonElement root = gson.fromJson(br, JsonElement.class);
 
-                        // Update surveyInfo if needed
-                        JsonObject surveyInfo = rootObject.getAsJsonObject("surveyInfo");
-                        if (surveyInfo == null) {
-                            // If "surveyInfo" is not present, create a new JsonObject for it
-                            surveyInfo = new JsonObject();
-                            rootObject.add("surveyInfo", surveyInfo);
-                        }
-                        surveyInfo.addProperty("title", ID.getTitle());
-                        surveyInfo.addProperty("description", ID.getDesc());
-
-                        // Add or update questions
-                        JsonArray questionsArray = rootObject.getAsJsonArray("questions");
-                        for (int i = 0; i < ID.getlist().size(); i++) {
-                            int n = ID.getlist().get(i);
-                            JsonObject questionDetails = determine(n);
-
-                            // Add or update question based on questionId
-                            boolean found = false;
-                            for (JsonElement element : questionsArray) {
-                                JsonObject existingQuestion = element.getAsJsonObject();
-                                if (existingQuestion.getAsJsonPrimitive("questionId").getAsInt() == n) {
-                                    // Question found, update it
-                                    existingQuestion.add("questionDetails", questionDetails);
-                                    found = true;
-                                    break;
-                                }
-                            }
-                            if (!found) {
-                                // Question not found, add a new question
-                                JsonObject newQuestion = new JsonObject();
-                                newQuestion.addProperty("questionId", n);
-                                newQuestion.add("questionDetails", questionDetails);
-                                questionsArray.add(newQuestion);
-                            }
-                        }
-
-                        // Write the updated JSON data back to the file
-                        try (FileWriter writer = new FileWriter(filepath)) {
-                            gson.toJson(rootObject, writer);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        result = rootObject; // Assign the found JsonObject to result
-                    } else {
-                        // Handle the case where the file is empty or not in a valid JSON format
-                        // You may want to create a new JSON structure or take appropriate action
-                        // based on your application's requirements.
-
-                        // Here, we'll create a new JSON structure with the new data
-                        JsonObject newJson = createNewJson();
-                        try (FileWriter writer = new FileWriter(filepath)) {
-                            gson.toJson(newJson, writer);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        result = newJson;
-                    }
-                }
-            } else {
-                // File doesn't exist, create a new JSON array with the new data
-                JsonObject newJson = createNewJson();
-                try (FileWriter writer = new FileWriter(filepath)) {
-                    gson.toJson(newJson, writer);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                result = newJson;
+            // Initialize as an array if not already
+            if (!root.isJsonArray()) {
+                root = new JsonArray();
             }
+
+            JsonArray jsonArray = root.getAsJsonArray();
+
+            // Generate a new survey ID
+            int newSurveyId = jsonArray.size() + 1;
+
+            // Construct the new survey object
+            JsonObject newSurvey = new JsonObject();
+            newSurvey.addProperty("surveyID", newSurveyId);
+
+            JsonObject surveyInfoObject = new JsonObject();
+            surveyInfoObject.addProperty("title", ID.getTitle());
+            surveyInfoObject.addProperty("description", ID.getDesc());
+            surveyInfoObject.addProperty("created_date", setCreatedDate());
+            surveyInfoObject.addProperty("email", ID.getEmail());
+
+            newSurvey.add("surveyInfo", surveyInfoObject);
+
+            JsonArray questionsArray = new JsonArray();
+            for (int i = 0; i < ID.getlist().size(); i++) {
+                int n = ID.getlist().get(i);
+                JsonObject questionDetails = determine(n);
+
+                questionDetails.addProperty("questionId", n);
+                questionDetails.add("questionDetails", questionDetails);
+                questionsArray.add(questionDetails);
+
+            }
+
+            newSurvey.add("questions", questionsArray);
+
+            // Add the new survey to the array
+            jsonArray.add(newSurvey);
+
+            // Save the modified array back to the file
+            saveJsonArrayToFile(filepath, jsonArray);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return result;
     }
 
-    private JsonObject createNewJson() {
-        JsonObject newJson = new JsonObject();
+    // private void savingDetails() {
+    // Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    // File file = new File(filepath);
 
-        // Create surveyInfo
-        JsonObject surveyInfo = new JsonObject();
-        surveyInfo.addProperty("title", ID.getTitle());
-        surveyInfo.addProperty("description", ID.getDesc());
+    // try {
+    // if (file.exists()) {
+    // // File exists, read existing data
+    // try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
+    // JsonElement root = gson.fromJson(br, JsonElement.class);
 
-        // Create questions array
-        JsonArray questionsArray = new JsonArray();
+    // if (root.isJsonArray()) {
+    // JsonArray jsonArray = root.getAsJsonArray();
+    // jsonArray.get("title").getAsJsonObject();
 
-        // Add or update questions
-        for (int i = 0; i < ID.getlist().size(); i++) {
-            int n = ID.getlist().get(i);
-            JsonObject questionDetails = determine(n);
+    // JsonObject object = new JsonObject();
+    // putItIn(jsonArray, object);
+    // }
+    // boolean isEmpty = false;
+    // for (JsonElement element : jsonArray) {
+    // JsonObject data = element.getAsJsonObject();
 
-            // Add a new question
-            JsonObject newQuestion = new JsonObject();
-            newQuestion.addProperty("questionId", n);
-            newQuestion.add("questionDetails", questionDetails);
-            questionsArray.add(newQuestion);
+    // // geting the surveyId
+    // String existingSurveyId = data.get("surveyID").getAsString();
+
+    // // cheking the survey is avaible or not
+    // if (isSurveyIdExists(jsonArray, existingSurveyId)) {
+    // isEmpty = false;
+    // String newSurveyId = generateNewSurveyId(jsonArray, existingSurveyId);
+    // data.addProperty("surveyID", newSurveyId);
+    // } else {
+    // isEmpty = true;
+    // }
+    // }
+
+    // // adding the question insides the survey such as MCQ, OE and LS
+    // JsonArray questionsArray = new JsonArray();
+    // for (int i = 0; i < ID.getlist().size(); i++) {
+    // int n = ID.getlist().get(i);
+    // JsonObject questionDetails = determine(n);
+
+    // questionDetails.addProperty("questionId", n);
+    // questionDetails.add("questionDetails", questionDetails);
+    // questionsArray.add(questionDetails);
+
+    // }
+    // // saving the array back to the json
+    // saveJsonArrayToFile(filepath, jsonArray);
+
+    // }
+    // }
+
+    // }
+    // } catch (IOException e) {
+    // e.printStackTrace();
+    // }
+    // }
+
+    // a function for determine wherease the id have been used;
+    private static boolean isSurveyIdExists(JsonArray jsonArray, String surveyId) {
+        for (JsonElement element : jsonArray) {
+            JsonObject surveyObject = element.getAsJsonObject();
+            String existingSurveyId = surveyObject.get("surveyID").getAsString();
+            if (existingSurveyId.equals(surveyId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // a function on bringing all the details to the survey
+    private void putItIn(JsonArray jsonArray, JsonObject data) {
+        for (JsonElement element : jsonArray) {
+            // adding all the info on the basic sides of the survey
+            JsonObject surveyInfo = new JsonObject();
+            surveyInfo.addProperty("title", ID.getTitle());
+            surveyInfo.addProperty("description", ID.getDesc());
+            surveyInfo.addProperty("created_date", setCreatedDate());
+            surveyInfo.addProperty("email", ID.getEmail());
+            data.add("surveyInfo", surveyInfo);
+        }
+    }
+
+    // generate a new id
+    private static String generateNewSurveyId(JsonArray jsonArray, String existingSurveyId) {
+        Set<String> existingIds = new HashSet<>();
+        for (JsonElement element : jsonArray) {
+            JsonObject surveyObject = element.getAsJsonObject();
+            existingIds.add(surveyObject.get("surveyID").getAsString());
         }
 
-        // Add surveyInfo and questions to the new JSON structure
-        newJson.add("surveyInfo", surveyInfo);
-        newJson.add("questions", questionsArray);
+        // Generate a new survey ID by adding one until it's unique
+        String newSurveyId = existingSurveyId;
+        int counter = 1;
+        while (existingIds.contains(newSurveyId)) {
+            newSurveyId = existingSurveyId + counter;
+            counter++;
+        }
 
-        return newJson;
+        return newSurveyId;
+    }
+
+    private static void saveJsonArrayToFile(String filePath, JsonArray jsonArray) throws IOException {
+        try (FileWriter fileWriter = new FileWriter(filePath)) {
+            fileWriter.write(jsonArray.toString());
+        }
+    }
+
+    private String setCreatedDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        String datenow = sdf.format(new Date());
+        return datenow;
     }
 
     private JsonObject determine(int q) {
@@ -497,51 +551,51 @@ public class QuestionPage implements Initializable {
                 return null; // Return null for unsupported node types
         }
     }
-    
+
     public void delete(int index) {
         List<Integer> IDList = ID.getlist();
-    
+
         if (IDList.contains(index) || (!IDList.isEmpty() && index >= 0 && index < IDList.size())) {
             // Remove the ID from the list
             IDList.remove(Integer.valueOf(index));
             renumberSubsequentQuestions(index);
-    
+
             // Read the existing JSON data from the file
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             File file = new File(filepath);
-    
+
             if (file.exists()) {
                 try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
                     JsonElement root = gson.fromJson(br, JsonElement.class);
-    
+
                     if (root != null && root.isJsonObject()) {
                         JsonObject rootObject = root.getAsJsonObject();
-    
+
                         // Remove the question from the JSON structure
                         JsonArray questionsArray = rootObject.getAsJsonArray("questions");
                         JsonArray newQuestionsArray = new JsonArray();
-    
+
                         // Find the index of the question to remove
                         for (int i = 0; i < questionsArray.size(); i++) {
                             JsonObject questionObject = questionsArray.get(i).getAsJsonObject();
                             int questionId = questionObject.getAsJsonPrimitive("questionId").getAsInt();
-    
+
                             if (questionId != index) {
                                 // Add questions to the new array, excluding the one to remove
                                 newQuestionsArray.add(questionObject);
                             }
                         }
-    
+
                         // Replace the original array with the new one
                         rootObject.add("questions", newQuestionsArray);
-    
+
                         // Write the updated JSON data back to the file
                         try (FileWriter writer = new FileWriter(filepath)) {
                             gson.toJson(rootObject, writer);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-    
+
                         System.out.println("Question with ID " + index + " deleted from JSON.");
                     } else {
                         System.out.println("JSON file is empty or not in a valid format.");
@@ -552,14 +606,12 @@ public class QuestionPage implements Initializable {
             } else {
                 System.out.println("JSON file does not exist.");
             }
-    
+
             ID.setList(IDList);
         } else {
             System.out.println("Question with ID " + index + " not found in the list.");
         }
     }
-    
-    
 
     // private void reselection(ActionEvent e) {
     // String choice = (String) comboBox.getValue();
@@ -619,12 +671,15 @@ public class QuestionPage implements Initializable {
     public class ID {
 
         private static int id;
+        private static String surveyID;
         public static int totalQ;
         public static List<Integer> IdList = new ArrayList<>();
         public static String title;
         public static String desc;
+        public static String email;
 
-        ID(String title, String desc) {
+        ID(String iD, String title, String desc) {
+            QuestionPage.ID.surveyID = iD;
             QuestionPage.ID.title = title;
             QuestionPage.ID.desc = desc;
         }
@@ -635,6 +690,14 @@ public class QuestionPage implements Initializable {
 
         public static void setID(int newID) {
             id = newID;
+        }
+
+        public static String getSurveyID() {
+            return surveyID;
+        }
+
+        public static void setSurveyID(String id) {
+            surveyID = id;
         }
 
         public static int getTotal() {
@@ -667,6 +730,14 @@ public class QuestionPage implements Initializable {
 
         public static void setDesc(String dsc) {
             desc = dsc;
+        }
+
+        public static String getEmail() {
+            return email;
+        }
+
+        public static void setEmail(String eml) {
+            email = eml;
         }
     }
 

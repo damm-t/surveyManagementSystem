@@ -28,5 +28,25 @@
         "phoneNumber": "asd",
         "picture": "",
         "username": "asd"
+    },
+    {
+        "email": "asd",
+        "faculty": "das",
+        "firstName": "das",
+        "lastName": "das",
+        "password": "asd",
+        "phoneNumber": "asd",
+        "picture": "",
+        "username": "asd"
+    },
+    {
+        "email": "asd1",
+        "faculty": "gfgf",
+        "firstName": "tdthdh",
+        "lastName": "cghghh",
+        "password": "asd",
+        "phoneNumber": "jgfjg",
+        "picture": "",
+        "username": "asd"
     }
 ]

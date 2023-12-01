@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -115,7 +116,7 @@
                                                                   <Insets left="20.0" top="10.0" />
                                                                </padding>
                                                             </Label>
-                                                            <TextField fx:id="surveyTitle" prefHeight="26.0" prefWidth="345.0" styleClass="titleTF" stylesheets="@z-QuestionDefault.css" text="How is your day">
+                                                            <TextField fx:id="surveyTitle" editable="false" prefHeight="26.0" prefWidth="345.0" styleClass="titleTF" stylesheets="@z-QuestionDefault.css" text="How is your day">
                                                                <HBox.margin>
                                                                   <Insets left="5.0" top="5.0" />
                                                                </HBox.margin>
@@ -129,7 +130,7 @@
                                                                   <Insets left="20.0" top="10.0" />
                                                                </padding>
                                                             </Label>
-                                                            <TextField fx:id="description" prefHeight="26.0" prefWidth="345.0" styleClass="descriptionTF" stylesheets="@z-QuestionDefault.css" text="Have a nice day">
+                                                            <TextField fx:id="description" editable="false" prefHeight="26.0" prefWidth="345.0" styleClass="descriptionTF" stylesheets="@z-QuestionDefault.css" text="Have a nice day">
                                                                <HBox.margin>
                                                                   <Insets left="9.0" top="5.0" />
                                                                </HBox.margin>

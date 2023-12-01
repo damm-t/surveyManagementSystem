@@ -1,2 +1,36 @@
-{
-}
+[
+    {
+        "surveyID" : 1,
+        "surveyInfo": {
+            "title": "TUSC Prom Night",
+            "description": "We will be hosting a prom night! We would like your opinions.",
+            "datePosted": "2023-11-30",
+            "email": "chow@gmail.com"
+        },
+        "questions": [
+            {
+                "questionDetails": {
+                    "type": "MCQ",
+                    "questionTitle": "ini",
+                    "questionId": 11,
+                    "Option": 1,
+                    "OptionTitle": "RM50-RM80",
+                    "Option": 2,
+                    "OptionTitle": "RM60-RM80"
+                }
+            },
+            {
+                "questionDetails": {
+                    "type": "OE",
+                    "questionId": 22
+                }
+            },
+            {
+                "questionDetails": {
+                    "type": "LS",
+                    "questionId": 33
+                }
+            }
+        ]
+    }
+]
