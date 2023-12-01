@@ -200,6 +200,7 @@ public class SignInController implements Initializable {
 
         private String filepath = "DB/surveycreator.json";
         public static JsonObject SCdata;
+        public static String email;
         //method
         public void comfirmation(String email){
 
@@ -216,6 +217,8 @@ public class SignInController implements Initializable {
                         String key = data.get("email").getAsString();
                         if (key.equalsIgnoreCase(email)) {
                             System.out.println("Imformation get found");
+                            String Email = key;
+                            setEmail(Email);
                             setSCdata(data);
                         }
                     }
@@ -230,6 +233,14 @@ public class SignInController implements Initializable {
 
         public static void setSCdata(JsonObject Scdata) {
             SCdata = Scdata;
+        }
+
+        public static String getEmail(){
+            return email;
+        }
+
+        public static void setEmail(String Email){
+            email = Email;
         }
         // public String getFirstName() {
         //     return firstName;

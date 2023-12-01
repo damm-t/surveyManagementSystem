@@ -161,6 +161,7 @@ public class sc_survey extends sc_mainPage_controller {
             JsonElement root = gson.fromJson(reader, JsonElement.class);
     
             if (root.isJsonArray()) {
+                
                 JsonArray jsonArray = root.getAsJsonArray();
     
                 for (JsonElement element : jsonArray) {
